@@ -14,6 +14,7 @@ population_size = 100
 generation_size = 100
 mutation_rate = 0.05
 items_count = 100
+iterations = 1000
 min_w = 1
 max_w = 5
 min_c = 2
@@ -27,7 +28,8 @@ def run_algo():
                               carrier_limit,
                               population_size,
                               generation_size,
-                              mutation_rate)
+                              mutation_rate,
+                              iterations)
     Knapsack.find_solution()
 
 

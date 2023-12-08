@@ -1,7 +1,7 @@
 import random
 
 
-def generate_random_float(start, end):
+def generate_random_num(start, end):
     return round(random.uniform(start, end), 2)
 
 
@@ -18,8 +18,8 @@ class ItemsGenerator:
         data = []
         for i in range(self.__N):
             item_id = i
-            weight = generate_random_float(self.__min_w, self.__max_w)
-            cost = generate_random_float(self.__min_c, self.__max_c)
+            weight = generate_random_num(self.__min_w, self.__max_w)
+            cost = generate_random_num(self.__min_c, self.__max_c)
             data.append((item_id, weight, cost))
 
         # Write data to a file
