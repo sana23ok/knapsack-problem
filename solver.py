@@ -14,7 +14,7 @@ class KnapsackSolver:
         self.__items_list = []  # list of objects of class Item
         self.__value_list = []
 
-    def read_input(self):
+    def __read_input(self):
         with open(self.__file, "r") as f:
             for line in f:
                 new_line = line.strip()
@@ -24,47 +24,58 @@ class KnapsackSolver:
                 new_item = items.Item(int(id), float(w), float(v))
                 self.__items_list.append(new_item)
 
-    def create_random_solution(self, i_list):
+    @staticmethod
+    def __create_random_solution(i_list):
         solution = []
         for i in range(0, len(i_list)):
             solution.append(random.randint(0, 1))
         return solution
 
-    def valid_solution(self, i_list, s_list, limit):
+    def __valid_solution(self, i_list, s_list):
         total_weight = 0
         for i in range(0, len(s_list)):
             if s_list[i] == 1:
                 total_weight += i_list[i].weight
-            if total_weight > limit:
+            if total_weight > self.__carrier_limit:
                 return False
         return True
 
-    def calculate_value(self, i_list, s_list):
+    @staticmethod
+    def __totalValue(i_list, s_list):
         total_value = 0
         for i in range(0, len(s_list)):
             if s_list[i] == 1:
                 total_value += i_list[i].value
         return total_value
 
-    def check_duplicate_solutions(self, S1, S2):
+    @staticmethod
+    def __totalWeight(i_list, s_list):
+        total_weight = 0
+        for i in range(0, len(s_list)):
+            if s_list[i] == 1:
+                total_weight += i_list[i].weight
+        return total_weight
+
+    @staticmethod
+    def __check_duplicate_solutions(S1, S2):
         for i in range(0, len(S1)):
             if S1[i] != S2[i]:
                 return False
         return True
 
-    def initial_population(self, pop_size, i_list, w_limit):
+    def __initial_population(self, pop_size, i_list):
         population = []
         i = 0
         while i < pop_size:
-            new_solution = self.create_random_solution(i_list)
-            if self.valid_solution(i_list, new_solution, w_limit):
+            new_solution = self.__create_random_solution(i_list)
+            if self.__valid_solution(i_list, new_solution):
                 if len(population) == 0:
                     population.append(new_solution)
                     i += 1
                 else:
                     skip = False
                     for j in range(0, len(population)):
-                        if self.check_duplicate_solutions(new_solution, population[j]):
+                        if self.__check_duplicate_solutions(new_solution, population[j]):
                             skip = True
                             continue
                     if not skip:
@@ -72,70 +83,90 @@ class KnapsackSolver:
                         i += 1
         return population
 
-    def tournament_selection(self, pop):
-        ticket_1 = random.randint(0, len(pop) - 1)
-        ticket_2 = random.randint(0, len(pop) - 1)
-        if self.calculate_value(self.__items_list, pop[ticket_1]) > \
-                self.calculate_value(self.__items_list, pop[ticket_2]):
-            winner = pop[ticket_1]
+    #Турнірна селекція: з популяції Р випадковим чином вибирається деяка
+    # підмножина і батьком призначається найкраще рішення в P множині
+    def __tournament_selection(self, curr_population):
+        variant_1 = random.randint(0, len(curr_population) - 1)
+        variant_2 = random.randint(0, len(curr_population) - 1)
+        # обрахування придатності вибраних особин
+        if self.__totalValue(self.__items_list, curr_population[variant_1]) > \
+                self.__totalValue(self.__items_list, curr_population[variant_2]):
+            winner = curr_population[variant_1]
         else:
-            winner = pop[ticket_2]
+            winner = curr_population[variant_2]
         return winner
 
-    def crossover(self, p1, p2):
-        break_point = random.randint(0, len(p1))
-        first_part = p1[:break_point]
-        second_part = p2[break_point:]
-        child = first_part + second_part
-        if self.valid_solution(self.__items_list, child, self.__carrier_limit):
+    # рівномірний кросиновер, кожен ген від батьків передається випадковим чином з ймовірністю 0,5.
+    def __equal_crossover(self, p1, p2):
+        child = []  # list with the genes of the child
+        for gene1, gene2 in zip(p1, p2):
+            prob = random.randint(0, 1)
+            if prob < 0.5:
+                child.append(gene1)
+            else:
+                child.append(gene2)
+
+        if self.__valid_solution(self.__items_list, child):
             return child
         else:
-            return self.crossover(p1, p2)
+            return self.__equal_crossover(p1, p2)
 
-    def mutation(self, chromosome):
-        temp = chromosome.copy()  # Create a copy of the chromosome
+    @staticmethod
+    def __swap(lst, index1, index2):
+        lst[index1], lst[index2] = lst[index2], lst[index1]
+
+    def __mutation(self, chromosome):
+        temp = chromosome.copy() # копія хромосоми
         mutation_index_1, mutation_index_2 = random.sample(range(0, len(chromosome)), 2)
-        temp[mutation_index_1], temp[mutation_index_2] = temp[mutation_index_2], temp[mutation_index_1]
-
-        if self.valid_solution(self.__items_list, temp, self.__carrier_limit):
+        # обрано два випадкових індекси в хромосомі
+        self.__swap(temp, mutation_index_1, mutation_index_2)
+        if self.__valid_solution(self.__items_list, temp):
             return temp
         else:
-            return self.mutation(chromosome)
+            return self.__mutation(chromosome)
 
-    def create_generation(self, pop, mut_rate):
+    def __create_generation(self, pop, mut_rate):
         new_gen = []
         for i in range(0, len(pop)):
-            parent_1 = self.tournament_selection(pop)
-            parent_2 = self.tournament_selection(pop)
-            child = self.crossover(parent_1, parent_2)
+            S1 = self.__tournament_selection(pop)
+            S2 = self.__tournament_selection(pop)
+            child = self.__equal_crossover(S1, S2)
             if random.random() < mut_rate:
-                child = self.mutation(child)
+                child = self.__mutation(child)
             new_gen.append(child)
         return new_gen
 
-    def best_solution(self, generation, i_list):
+    def __goal_solution(self, generation, i_list):
         best = 0
         for i in range(0, len(generation)):
-            temp = self.calculate_value(i_list, generation[i])
+            temp = self.__totalValue(i_list, generation[i])
             if temp > best:
                 best = temp
         return best
 
-    def genetic_algorithm(self, c_limit, p_size, gen_size, mutation_rate, i_list):
-        pop = self.initial_population(p_size, i_list, c_limit)
+    def genetic_algorithm(self, p_size, gen_size, mutation_rate, i_list):
+        pop = self.__initial_population(p_size, i_list)
+        counter = 0
         for i in range(0, gen_size):
-            pop = self.create_generation(pop, mutation_rate)
-            print(pop[0])
+            pop = self.__create_generation(pop, mutation_rate)
 
-            print("value => ", self.calculate_value(i_list, pop[0]))
-            self.__value_list.append(self.best_solution(pop, i_list))
+            # Print information for iterations divisible by 20
+            if counter % 20 == 0:
+                print(f"Iteration {counter}")
+                print("Best solution:", pop[0])
+                print("Value:", self.__totalValue(i_list, pop[0]))
+                print("Weight:", self.__totalWeight(i_list, pop[0]))
+
+            self.__value_list.append(self.__goal_solution(pop, i_list))
+            counter += 1
+        print(f"Total count of iterations: {counter}")
         return pop, self.__value_list
 
     def find_solution(self):
-        self.read_input()
-        latest_pop, v_list = self.genetic_algorithm(self.__carrier_limit,
-                                                    self.__population_size,
-                                                    self.__generation_size,
+        self.__read_input()
+        iter_limit = 1000
+        latest_pop, v_list = self.genetic_algorithm(self.__population_size,
+                                                    iter_limit,
                                                     self.__mutation_rate,
                                                     self.__items_list)
 
