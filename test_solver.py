@@ -104,34 +104,6 @@ class MyTestCase(unittest.TestCase, KnapsackSolver):
         # Ensure the best_solution matches the maximum total cost
         self.assertEqual(best_solution, max(total_costs))
 
-    # def tearDown(self):
-    #     # Clean up by removing the temporary file
-    #     if os.path.exists(self.test_file):
-    #         os.remove(self.test_file)
-    #
-    # def test_generate_items(self):
-    #     # Create an instance of ItemsGenerator for testing
-    #     generator = ItemsGenerator(self.test_file, 1, 10, 5, 20, 3)
-    #
-    #     # Test the generateItems method
-    #     generator.generateItems()
-    #
-    #     # Check if the file has been generated
-    #     self.assertTrue(os.path.exists(self.test_file))
-    #
-    #     # Read the content of the file and check if it has the expected number of lines
-    #     with open(self.test_file, 'r') as file:
-    #         lines = file.readlines()
-    #         self.assertEqual(len(lines), 3)  # Assuming 3 items were generated
-    #
-    #     # Check if the content of each line is in the expected format
-    #     for line in lines:
-    #         parts = line.strip().split()
-    #         self.assertEqual(len(parts), 3)  # Assuming each line has three values
-    #         item_id, weight, cost = map(float, parts)
-    #         self.assertIsInstance(item_id, float)
-    #         self.assertIsInstance(weight, float)
-    #         self.assertIsInstance(cost, float)
 
 if __name__ == '__main__':
     unittest.main()
