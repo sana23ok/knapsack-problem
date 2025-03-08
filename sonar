@@ -3,3 +3,14 @@ C:\Users\oksan\SonarScanner\sonar-scanner-7.0.2.4839-windows-x64\bin\sonar-scann
   "-Dsonar.sources=." `
   "-Dsonar.host.url=http://localhost:9000" `
   "-Dsonar.token=sqp_a177bb29b99ad88c9b55a42b0253c51d3a28f350"
+
+-- sonar-scanner -Dsonar.python.coverage.reportPaths=coverage.xml
+
+C:\Users\oksan\SonarScanner\sonar-scanner-7.0.2.4839-windows-x64\bin\sonar-scanner `
+  "-Dsonar.projectKey=Lab3_Python" `
+  "-Dsonar.sources=." `
+  "-Dsonar.host.url=http://localhost:9000" `
+  "-Dsonar.token=sqp_a177bb29b99ad88c9b55a42b0253c51d3a28f350" `
+  "-Dsonar.python.coverage.reportPaths=coverage.xml"
+
+
