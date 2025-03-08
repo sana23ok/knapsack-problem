@@ -2,5 +2,5 @@ projectKey=Lab3_Python
 serverUrl=http://localhost:9000
 serverVersion=25.3.0.104237
 dashboardUrl=http://localhost:9000/dashboard?id=Lab3_Python
-ceTaskId=4953df38-978e-4562-a63c-b2d68cf383d1
-ceTaskUrl=http://localhost:9000/api/ce/task?id=4953df38-978e-4562-a63c-b2d68cf383d1
+ceTaskId=85975b28-0808-47ce-ae53-376283ffc371
+ceTaskUrl=http://localhost:9000/api/ce/task?id=85975b28-0808-47ce-ae53-376283ffc371

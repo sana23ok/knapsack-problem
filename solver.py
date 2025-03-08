@@ -94,23 +94,17 @@ class KnapsackSolver:
 
     def _initial_population(self, population_size):
         population = []
-        i = 0
-        while i < population_size:
+        while len(population) < population_size:
             new_solution = self._create_rand_solution()
-            if self._is_valid(new_solution):
-                if len(population) == 0:
-                    population.append(new_solution)
-                    i += 1
-                else:
-                    skip = False
-                    for j in range(0, len(population)):
-                        if self._check_duplicate_solutions(new_solution, population[j]):
-                            skip = True
-                            continue
-                    if not skip:
-                        population.append(new_solution)
-                        i += 1
+            if self._is_valid(new_solution) and self._is_unique_solution(new_solution, population):
+                population.append(new_solution)
         return population
+
+    def _is_unique_solution(self, new_solution, population):
+        for existing_solution in population:
+            if self._check_duplicate_solutions(new_solution, existing_solution):
+                return False
+        return True
 
     # Турнірна селекція: з популяції Р випадковим чином вибирається деяка
     # підмножина і батьком призначається найкраще рішення в P множині
