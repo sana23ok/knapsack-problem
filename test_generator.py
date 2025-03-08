@@ -18,7 +18,7 @@ class TestItemsGenerator(unittest.TestCase):
         self.assertTrue(self.min_w <= random_float <= self.max_w)
 
     def test_generateItems(self):
-        self.generator.generateItems()
+        self.generator.generate_items()
         self.assertTrue(os.path.exists(self.file_name))
         with open(self.file_name, 'r') as file:
             lines = file.readlines()

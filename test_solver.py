@@ -34,7 +34,7 @@ class MyTestCase(unittest.TestCase, KnapsackSolver):
 
     def test_totalWeight(self):
         self.solver.items_list = [Item(0, 10, 20), Item(1, 15, 25)]
-        weight = self.solver._totalWeight([1, 0])
+        weight = self.solver._total_weight([1, 0])
         self.assertEqual(weight, 10)
 
     def test_check_duplicate_solutions(self):
@@ -100,7 +100,7 @@ class MyTestCase(unittest.TestCase, KnapsackSolver):
         # Test the _goal_solution method
         best_solution = self.solver._goal_solution(mock_generation)
         # Mock total costs for each chromosome in the generation
-        total_costs = [self.solver._totalCost(chromosome) for chromosome in mock_generation]
+        total_costs = [self.solver._total_cost(chromosome) for chromosome in mock_generation]
         # Ensure the best_solution matches the maximum total cost
         self.assertEqual(best_solution, max(total_costs))
 

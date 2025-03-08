@@ -6,15 +6,15 @@ def generate_random_num(start, end):
 
 
 class ItemsGenerator:
-    def __init__(self, file_name: str, min_w: int, max_w: int, min_c: int, max_c: int, numOfItems: int):
+    def __init__(self, file_name: str, min_w: int, max_w: int, min_c: int, max_c: int, num_of_items: int):
         self.__file = file_name
         self.__min_w = min_w
         self.__max_w = max_w
         self.__min_c = min_c
         self.__max_c = max_c
-        self.__N = numOfItems
+        self.__N = num_of_items
 
-    def generateItems(self):
+    def generate_items(self):
         data = []
         for i in range(self.__N):
             item_id = i

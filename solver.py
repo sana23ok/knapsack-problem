@@ -34,8 +34,8 @@ class KnapsackSolver:
             if counter % 20 == 0:
                 print(f"Iteration {counter}")
                 # print("Best solution:", pop[0])
-                print("Value:", self._totalCost(pop[0]))  # equal to the cost of goal function
-                print("Weight:", self._totalWeight(pop[0]))
+                print("Value:", self._total_cost(pop[0]))  # equal to the cost of goal function
+                print("Weight:", self._total_weight(pop[0]))
 
             self.value_list.append(self._goal_solution(pop))
             counter += 1
@@ -70,14 +70,14 @@ class KnapsackSolver:
                 return False
         return True
 
-    def _totalCost(self, s_list):
+    def _total_cost(self, s_list):
         total_cost = 0
         for i in range(0, len(s_list)):
             if s_list[i] == 1:
                 total_cost += self.items_list[i].value
         return total_cost
 
-    def _totalWeight(self, s_list):
+    def _total_weight(self, s_list):
         total_weight = 0
         for i in range(0, len(self.items_list)):
             if s_list[i] == 1:
@@ -111,7 +111,7 @@ class KnapsackSolver:
         variant_1 = random.randint(0, len(curr_population) - 1)
         variant_2 = random.randint(0, len(curr_population) - 1)
         # обрахування придатності вибраних особин
-        if self._totalCost(curr_population[variant_1]) > self._totalCost(curr_population[variant_2]):
+        if self._total_cost(curr_population[variant_1]) > self._total_cost(curr_population[variant_2]):
             winner = curr_population[variant_1]
         else:
             winner = curr_population[variant_2]
@@ -161,7 +161,7 @@ class KnapsackSolver:
     def _goal_solution(self, generation):
         best = 0
         for i in range(0, len(generation)):
-            temp = self._totalCost(generation[i])
+            temp = self._total_cost(generation[i])
             if temp > best:
                 best = temp
         return best

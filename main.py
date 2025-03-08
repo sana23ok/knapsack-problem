@@ -23,7 +23,7 @@ max_c = 10
 
 def run_algo():
     Data = ItemsGenerator(file_name, min_w, max_w, min_c, max_c, items_count)
-    Data.generateItems()
+    Data.generate_items()
     Knapsack = KnapsackSolver(file_name,
                               carrier_limit,
                               population_size,
