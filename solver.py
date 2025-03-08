@@ -58,7 +58,7 @@ class KnapsackSolver:
 
     def _create_rand_solution(self):
         solution = []
-        for i in range(0, len(self.items_list)):
+        for _ in range(0, len(self.items_list)):
             solution.append(random.randint(0, 1))
         return solution
 
