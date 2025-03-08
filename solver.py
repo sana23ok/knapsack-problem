@@ -20,15 +20,14 @@ class KnapsackSolver:
             for line in f:
                 new_line = line.strip()
                 new_line = new_line.split(" ")
-                id, w, v = new_line[0], new_line[1], new_line[2]
-                # check dataset file to see why id,w,v = 0,1,2
-                new_item = items.Item(int(id), float(w), float(v))
+                it_id, w, v = new_line[0], new_line[1], new_line[2]
+                new_item = items.Item(int(it_id), float(w), float(v))
                 self.items_list.append(new_item)
 
     def genetic_algorithm(self, p_size, mutation_rate):
         pop = self._initial_population(p_size)
         counter = 0
-        for i in range(0, self.iterations_limit):
+        for _ in range(0, self.iterations_limit):
             pop = self._create_generation(pop, mutation_rate)
 
             # print information for iterations divisible by 20
